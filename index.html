@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corujinha Pães & Bolos - Galeria de Produtos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #fef7f0, #fdf2f8);
+            color: #4a044e;
+        }
+        
+        .logo-font {
+            font-family: 'Dancing Script', cursive;
+        }
+        
+        .nav-button {
+            transition: all 0.3s ease;
+        }
+        
+        .nav-button.active {
+            background-color: #c026d3;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(192, 38, 211, 0.3);
+        }
+        
+        .product-card {
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid transparent;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            border-color: #f0abfc;
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .product-card:hover .product-image {
+            transform: scale(1.1);
+        }
+        
+        .category-badge {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+        }
+        
+        .product-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .product-card:hover .product-overlay {
+            opacity: 1;
+        }
+        
+        .overlay-text {
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .info-icon {
+            background: rgba(192, 38, 211, 0.9);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px auto;
+        }
+        
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .modal-content {
+            max-width: 800px;
+            width: 100%;
+            max-height: 80vh;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+        
+        .modal-content img {
+            width: 100%;
+            height: auto;
+            max-height: 70vh;
+            object-fit: contain;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .product-card {
+            animation: fadeIn 0.6s ease-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <!-- Header com espaço para Logo -->
+        <header class="text-center mb-12">
+            <div class="flex justify-center items-center mb-6">
+                <div class="w-32 h-32 bg-white rounded-full shadow-lg flex items-center justify-center border-4 border-pink-200">
+                    <div class="text-center">
+                        <img src="https://filipesep.github.io/cardapio/img/logo.png" alt="Corujinha Pães & Bolos" class="w-24 h-24 object-contain">
+                    </div>
+                </div>
+            </div>
+            
+            <h1 class="logo-font text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-500 mb-4">
+                Corujinha Pães & Bolos
+            </h1>
+            <p class="text-lg md:text-xl text-purple-700 max-w-2xl mx-auto">
+                Galeria de nossas delícias - Clique nas imagens para ver detalhes
+            </p>
+        </header>
+
+        <!-- Seção da Galeria -->
+        <main>
+            <section id="gallery-section" class="mb-16">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-purple-800 mb-3">Nossas Delícias</h2>
+                    <p class="text-purple-600 max-w-3xl mx-auto">
+                        Explore nossa variedade de produtos. Passe o mouse sobre as imagens para ver informações.
+                    </p>
+                </div>
+
+                <!-- Filtros de Categoria -->
+                <nav id="category-filters" class="flex flex-wrap justify-center gap-3 mb-10">
+                    <!-- Os botões serão gerados pelo JavaScript -->
+                </nav>
+
+                <!-- Grid de Produtos com Fotos -->
+                <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <!-- Os cards serão gerados pelo JavaScript -->
+                </div>
+            </section>
+            
+            <!-- Modal para ampliar foto -->
+            <div id="image-modal" class="modal-overlay">
+                <div class="close-modal" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </div>
+                <div class="modal-content">
+                    <img id="modal-image" src="" alt="Imagem ampliada">
+                    <div class="bg-white p-6 text-center">
+                        <h3 id="modal-title" class="text-2xl font-bold text-gray-800 mb-2"></h3>
+                        <p id="modal-description" class="text-gray-600 mb-4"></p>
+                        <div id="modal-details" class="text-left max-w-md mx-auto"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="text-center mt-16 py-8 border-t border-pink-200 bg-white rounded-lg">
+            <div class="max-w-md mx-auto">
+                <div class="logo-font text-2xl text-purple-600 font-bold mb-2">Corujinha Pães & Bolos</div>
+                <p class="text-purple-500 text-sm mb-4">
+                    Confeitaria Artesanal • Entre em contato para orçamentos
+                </p>
+                <div class="flex justify-center gap-4 text-purple-400">
+                    <i class="fab fa-instagram hover:text-pink-500 cursor-pointer"></i>
+                    <i class="fab fa-whatsapp hover:text-green-500 cursor-pointer"></i>
+                    <i class="fas fa-phone hover:text-blue-500 cursor-pointer"></i>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Dados dos produtos COM IMAGENS (sem sabores nos bolos recheados)
+        const menuData = [
+            { 
+                name: 'Pão simples', 
+                category: 'Pães caseiros', 
+                price: 20.00,
+                image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=600&h=400&fit=crop',
+                description: 'Pão caseiro fresquinho, perfeito para o café da manhã'
+            },
+            { 
+                name: 'Fatia Húngaras', 
+                category: 'Pães caseiros', 
+                price: 6.00,
+                image: 'https://images.unsplash.com/photo-1549931319-a545dcf3bc73?w=600&h=400&fit=crop',
+                description: 'Fatia de pão húngaro tradicional'
+            },
+            { 
+                name: 'Pão recheado', 
+                category: 'Pães caseiros', 
+                price: 40.00,
+                description: 'Delicioso pão caseiro recheado com calabresa ou bauru',
+                image: 'https://images.unsplash.com/photo-1608198093002-ad4e005484ec?w=600&h=400&fit=crop'
+            },
+            { 
+                name: 'Bolo de Milho', 
+                category: 'Bolos simples', 
+                price: 50.00, 
+                portions: 16,
+                image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&h=400&fit=crop',
+                description: 'Bolo de milho cremoso, receita tradicional'
+            },
+            { 
+                name: 'Bolo de Fubá', 
+                category: 'Bolos simples', 
+                price: 50.00, 
+                portions: 16,
+                image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&h=400&fit=crop',
+                description: 'Bolo de fubá fofinho, perfeito para o café'
+            },
+            { 
+                name: 'Bolo Fubá c/ goiabada', 
+                category: 'Bolos simples', 
+                price: 60.00, 
+                portions: 16,
+                image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&h=400&fit=crop',
+                description: 'Bolo de fubá com camadas de goiabada'
+            },
+            { 
+                name: 'Bolo Cocada invertida', 
+                category: 'Bolos simples', 
+                price: 60.00, 
+                portions: 16,
+                image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&h=400&fit=crop',
+                description: 'Bolo de cocada com cobertura caramelizada'
+            },
+            { 
+                name: 'Bolo de Chocolate', 
+                category: 'Bolos simples', 
+                price: 60.00, 
+                portions: 16,
+                image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&h=400&fit=crop',
+                description: 'Bolo de chocolate úmido e saboroso'
+            },
+            { 
+                name: 'Bolo Mesclado', 
+                category: 'Bolos simples', 
+                price: 60.00, 
+                portions: 16,
+                image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&h=400&fit=crop',
+                description: 'Bolo mesclado de chocolate e baunilha'
+            },
+            { 
+                name: 'Bolo Formigueiro', 
+                category: 'Bolos simples', 
+                price: 55.00, 
+                portions: 16,
+                image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&h=400&fit=crop',
+                description: 'Bolo formigueiro com chocolate granulado'
+            },
+            { 
+                name: 'Bolo Laranja c/ casca', 
+                category: 'Bolos simples', 
+                price: 60.00, 
+                portions: 16,
+                image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&h=400&fit=crop',
+                description: 'Bolo de laranja com casca, cítrico e aromático'
+            },
+            { 
+                name: 'Bolo Queijadinha', 
+                category: 'Bolos simples', 
+                price: 65.00, 
+                portions: 16,
+                image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&h=400&fit=crop',
+                description: 'Bolo sabor queijadinha, cremoso e doce'
+            },
+            { 
+                name: 'Bolo Fubá Cremoso', 
+                category: 'Bolos simples', 
+                price: 60.00, 
+                portions: 16,
+                image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&h=400&fit=crop',
+                description: 'Bolo de fubá com textura cremosa'
+            },
+            { 
+                name: 'Bolo Cenoura Vulcão', 
+                category: 'Bolos vulcão', 
+                price: 75.00,
+                image: 'https://images.unsplash.com/photo-1624353365286-3f8d62dadadf?w=600&h=400&fit=crop',
+                description: 'Bolo de cenoura com recheio cremoso tipo vulcão'
+            },
+            { 
+                name: 'Torta de Frango G', 
+                category: 'Tortas salgadas', 
+                price: 95.00,
+                image: 'https://images.unsplash.com/photo-1569929238190-869826b1bb05?w=600&h=400&fit=crop',
+                description: 'Torta de frango grande, perfeita para reuniões'
+            },
+            { 
+                name: 'Torta Baurú', 
+                category: 'Tortas salgadas', 
+                price: 110.00,
+                image: 'https://images.unsplash.com/photo-1569929238190-869826b1bb05?w=600&h=400&fit=crop',
+                description: 'Torta sabor bauru com presunto e queijo'
+            },
+            { 
+                name: 'Torta de morango', 
+                category: 'Tortas doces', 
+                price: 100.00, 
+                portions: 10,
+                image: 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Silvialeite-com-br-creative-commons-4-sa.jpg',
+                description: 'Torta de morango com creme e frutas frescas'
+            },
+            { 
+                name: 'Torta de limão', 
+                category: 'Tortas doces', 
+                price: 85.00, 
+                portions: 10,
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmDirNIfjsprWHp9BesE0-ydNyvqElgUZQTQ&s',
+                description: 'Torta de limão com merengue'
+            },
+            { 
+                name: 'Torta Maracolate', 
+                category: 'Tortas doces', 
+                price: 110.00, 
+                portions: 10,
+                image: 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Silvialeite-com-br-creative-commons-4-sa.jpg',
+                description: 'Torta combinação de maracujá e chocolate'
+            },
+            { 
+                name: 'Torta holandesa', 
+                category: 'Tortas doces', 
+                price: 120.00, 
+                portions: 10,
+                image: 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Silvialeite-com-br-creative-commons-4-sa.jpg',
+                description: 'Torta holandesa com camadas de biscoito e chocolate'
+            },
+            { 
+                name: 'Torta banoffe', 
+                category: 'Tortas doces', 
+                price: 120.00, 
+                portions: 10,
+                image: 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Silvialeite-com-br-creative-commons-4-sa.jpg',
+                description: 'Torta banoffe com banana, doce de leite e chantilly'
+            },
+            { 
+                name: 'Bolo Bob Esponja', 
+                category: 'Bolos recheados', 
+                image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&h=400&fit=crop',
+                description: 'Lindo bolo temático do Bob Esponja para festas infantis'
+            },
+             { 
+                name: 'Bolo Aniversário', 
+                category: 'Bolos recheados', 
+                image: '<img src= "https://filipesep.github.io/album-card-pio/img/bolorosa.jpg" alt="Bolo Aniversário" class="w-full h-48 object-cover">',
+                description: 'Lindo bolo com decoração minimalista para aniversários'
+            },
+            { 
+                name: 'Pudim G', 
+                category: 'Outros', 
+                price: 90.00,
+                image: 'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=600&h=400&fit=crop',
+                description: 'Pudim tradicional grande'
+            },
+            { 
+                name: 'Pudim M', 
+                category: 'Outros', 
+                price: 50.00,
+                image: 'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=600&h=400&fit=crop',
+                description: 'Pudim tradicional médio'
+            },
+            { 
+                name: 'Sonhos', 
+                category: 'Outros', 
+                price: 8.00,
+                image: 'https://images.unsplash.com/photo-1569929238190-869826b1bb05?w=600&h=400&fit=crop',
+                description: 'Sonhos recheados com creme'
+            },
+            { 
+                name: 'Pão de mel', 
+                category: 'Outros', 
+                price: 9.00,
+                image: 'https://images.unsplash.com/photo-1569929238190-869826b1bb05?w=600&h=400&fit=crop',
+                description: 'Pão de mel caseiro'
+            },
+            { 
+                name: 'Esfiha Carne - M', 
+                category: 'Esfiha', 
+                price: 5.00,
+                image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&h=400&fit=crop',
+                description: 'Esfiha de carne média'
+            },
+            { 
+                name: 'Esfiha Carne c/ Muçarela - M', 
+                category: 'Esfiha', 
+                price: 6.00,
+                image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&h=400&fit=crop',
+                description: 'Esfiha de carne com muçarela'
+            },
+            { 
+                name: 'Esfiha Calabresa c/ Cheddar - M', 
+                category: 'Esfiha', 
+                price: 6.00,
+                image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&h=400&fit=crop',
+                description: 'Esfiha de calabresa com cheddar'
+            },
+            { 
+                name: 'Cuscuz Paulista - G', 
+                category: 'Cuscuz', 
+                price: 160.00,
+                portions: 10,
+                image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&h=400&fit=crop',
+                description: 'Cuscuz paulista grande com sardinha'
+            },
+            { 
+                name: 'Cuscuz Paulista - M', 
+                category: 'Cuscuz', 
+                price: 100.00,
+                portions: 6,
+                image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&h=400&fit=crop',
+                description: 'Cuscuz paulista médio com sardinha'
+            }
+        ];
+
+        const categoryColors = {
+            'Pães caseiros': 'bg-amber-100 text-amber-800 border-amber-300',
+            'Bolos simples': 'bg-purple-100 text-purple-800 border-purple-300',
+            'Bolos vulcão': 'bg-pink-100 text-pink-800 border-pink-300',
+            'Tortas salgadas': 'bg-green-100 text-green-800 border-green-300',
+            'Tortas doces': 'bg-rose-100 text-rose-800 border-rose-300',
+            'Bolos recheados': 'bg-blue-100 text-blue-800 border-blue-300',
+            'Outros': 'bg-gray-100 text-gray-800 border-gray-300',
+            'Esfiha': 'bg-yellow-100 text-yellow-800 border-yellow-300',
+            'Cuscuz': 'bg-orange-100 text-orange-800 border-orange-300'
+        };
+
+        // Função para abrir modal
+        function openModal(item) {
+            document.getElementById('modal-image').src = item.image;
+            document.getElementById('modal-title').textContent = item.name;
+            document.getElementById('modal-description').textContent = item.description || '';
+            
+            let detailsHTML = '<div class="space-y-2">';
+            if (item.price) {
+                detailsHTML += `<p class="text-lg font-bold text-purple-600">Preço: R$ ${item.price.toFixed(2).replace('.', ',')}</p>`;
+            }
+            if (item.portions) {
+                detailsHTML += `<p class="text-gray-700"><span class="font-semibold">Rende:</span> ${item.portions} pedaços</p>`;
+            }
+            if (item.per_kg) {
+                detailsHTML += `<p class="text-gray-700"><span class="font-semibold">Venda:</span> Por quilo</p>`;
+            }
+            // REMOVIDO: seção de sabores para bolos recheados
+            detailsHTML += `<p class="text-gray-700"><span class="font-semibold">Categoria:</span> ${item.category}</p>`;
+            detailsHTML += '</div>';
+            
+            document.getElementById('modal-details').innerHTML = detailsHTML;
+            document.getElementById('image-modal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Função para fechar modal
+        function closeModal() {
+            document.getElementById('image-modal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Fechar modal com ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // Fechar modal clicando fora
+        document.getElementById('image-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'image-modal') closeModal();
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const galleryGrid = document.getElementById('gallery-grid');
+            const categoryFilters = document.getElementById('category-filters');
+
+            const categories = ['Todos', ...new Set(menuData.map(item => item.category))];
+
+            function renderGallery(items) {
+                galleryGrid.innerHTML = '';
+                
+                items.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'product-card bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer';
+                    
+                    card.innerHTML = `
+                        <div class="relative h-full" onclick="openModal(${JSON.stringify(item).replace(/"/g, '&quot;')})">
+                            <img src="${item.image}" alt="${item.name}" class="product-image">
+                            <div class="product-overlay">
+                                <div class="overlay-text">
+                                    <div class="info-icon">
+                                        <i class="fas fa-info"></i>
+                                    </div>
+                                    <h3 class="font-bold text-lg mb-1">${item.name}</h3>
+                                    <p class="text-sm opacity-90">Clique para detalhes</p>
+                                </div>
+                            </div>
+                            <div class="absolute top-3 left-3">
+                                <span class="category-badge font-semibold border ${categoryColors[item.category] || 'bg-gray-100 text-gray-800'}">
+                                    ${item.category}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-bold text-lg text-gray-800 mb-2">${item.name}</h3>
+                            ${item.description ? `<p class="text-sm text-gray-600 mb-2 line-clamp-2">${item.description}</p>` : ''}
+                        </div>
+                    `;
+                    
+                    galleryGrid.appendChild(card);
+                });
+            }
+
+            function setupFilters() {
+                categories.forEach(category => {
+                    const button = document.createElement('button');
+                    button.textContent = category;
+                    button.className = 'nav-button px-5 py-3 rounded-full font-medium bg-white text-purple-700 border border-purple-200 hover:bg-purple-50 transition-all duration-300';
+                    
+                    if (category === 'Todos') {
+                        button.classList.add('active');
+                    }
+                    
+                    button.addEventListener('click', () => {
+                        document.querySelectorAll('.nav-button').forEach(btn => btn.classList.remove('active'));
+                        button.classList.add('active');
+                        
+                        const filteredData = category === 'Todos' 
+                            ? menuData 
+                            : menuData.filter(item => item.category === category);
+                        
+                        renderGallery(filteredData);
+                    });
+                    
+                    categoryFilters.appendChild(button);
+                });
+            }
+
+            setupFilters();
+            renderGallery(menuData);
+        });
+    </script>
+</body>
+</html>
